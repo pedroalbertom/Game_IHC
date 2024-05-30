@@ -144,12 +144,12 @@ const styles = StyleSheet.create({
   },
   scoreText: {
     fontSize: 24,
-    color: 'white',
+    color: 'black',
     marginRight: 20,
   },
   pauseButton: {
     fontSize: 50,
-    color: 'white',
+    color: 'black',
     top: 35,
     left: -130,
   },
