@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     position: 'absolute',
+    borderColor: 'black',
+    borderStyle: 'solid',
+    borderWidth: 1.5,
+    borderRadius: 5
   },
 });
 
