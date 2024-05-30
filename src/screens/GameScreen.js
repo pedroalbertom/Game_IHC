@@ -46,9 +46,11 @@ const GameScreen = () => {
   }, [paused]);
 
   const moveFish = (evt) => {
-    const touchX = evt.nativeEvent.pageX;
-    const newFishX = touchX - 25;
-    setFishPosition([newFishX, height - 60]);
+    if (!paused) {
+      const touchX = evt.nativeEvent.pageX;
+      const newFishX = touchX - 25;
+      setFishPosition([newFishX, height - 60]);
+    }
   };
 
   const handleCollisions = useCallback(() => {
@@ -142,12 +144,12 @@ const styles = StyleSheet.create({
   },
   scoreText: {
     fontSize: 24,
-    color: 'black',
+    color: 'white',
     marginRight: 20,
   },
   pauseButton: {
     fontSize: 50,
-    color: 'black',
+    color: 'white',
     top: 35,
     left: -130,
   },
