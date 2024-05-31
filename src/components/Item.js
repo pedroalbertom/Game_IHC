@@ -1,23 +1,35 @@
-// components/Item.js
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
 
-const Item = ({ type, position }) => {
-  const backgroundColor = type === 'food' ? 'green' : 'red';
+const Item = ({ type, position, image }) => {
   return (
-    <View style={[styles.item, { backgroundColor, left: position[0], top: position[1] }]} />
+    <View style={[styles.item, { left: position[0], top: position[1] }]}>
+      {type === 'trash' && image ? (
+        <Image source={image} style={styles.image} />
+      ) : (
+        <View style={[styles.defaultItem, type === 'food' ? styles.food : null]} />
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   item: {
-    width: 30,
-    height: 30,
     position: 'absolute',
-    borderColor: 'black',
-    borderStyle: 'solid',
-    borderWidth: 1.5,
-    borderRadius: 5
+    width: 48, // Adjusted for 32x32 items
+    height: 48, // Adjusted for 32x32 items
+  },
+  image: {
+    width: 48, // Adjusted for 32x32 items
+    height: 48, // Adjusted for 32x32 items
+  },
+  defaultItem: {
+    width: 48, // Adjusted for 32x32 items
+    height: 48, // Adjusted for 32x32 items
+    borderRadius: 24, // Adjusted for 32x32 items
+  },
+  food: {
+    backgroundColor: 'green',
   },
 });
 

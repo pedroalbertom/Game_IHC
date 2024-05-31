@@ -1,14 +1,38 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Dimensions, TouchableWithoutFeedback, Text, Alert, TouchableOpacity } from 'react-native';
-import Fish from '../components/Fish';
+import { StyleSheet, View, Dimensions, TouchableWithoutFeedback, Text, Alert, TouchableOpacity, Image } from 'react-native';
 import Item from '../components/Item';
 import Heart from '../components/Heart';
 import { Ionicons } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 
+// Import trash images
+const trashImages = [
+  require('../../assets/images/trash/trash1.png'),
+  require('../../assets/images/trash/trash2.png'),
+  require('../../assets/images/trash/trash3.png'),
+  require('../../assets/images/trash/trash4.png'),
+  require('../../assets/images/trash/trash5.png'),
+  require('../../assets/images/trash/trash6.png'),
+  require('../../assets/images/trash/trash7.png'),
+  require('../../assets/images/trash/trash8.png'),
+  require('../../assets/images/trash/trash9.png'),
+  require('../../assets/images/trash/trash10.png'),
+  require('../../assets/images/trash/trash11.png'),
+  require('../../assets/images/trash/trash12.png'),
+  require('../../assets/images/trash/trash13.png'),
+  require('../../assets/images/trash/trash14.png'),
+  require('../../assets/images/trash/trash15.png'),
+  require('../../assets/images/trash/trash16.png'),
+  require('../../assets/images/trash/trash17.png'),
+  require('../../assets/images/trash/trash18.png'),
+  require('../../assets/images/trash/trash19.png'),
+  require('../../assets/images/trash/trash20.png'),
+];
+
+
 const GameScreen = () => {
-  const [fishPosition, setFishPosition] = useState([width / 2 - 25, height - 60]);
+  const [fishPosition, setFishPosition] = useState([width / 2 - 24, height - 48]); // Adjusted for 48x48 fish
   const [items, setItems] = useState([]);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
@@ -19,7 +43,12 @@ const GameScreen = () => {
       if (!paused) {
         setItems((prevItems) => [
           ...prevItems,
-          { id: Math.random().toString(), type: Math.random() < 0.7 ? 'food' : 'trash', position: [Math.random() * (width - 30), -30] },
+          {
+            id: Math.random().toString(),
+            type: Math.random() < 0.7 ? 'food' : 'trash',
+            position: [Math.random() * (width - 48), -48],
+            image: this.type === 'trash' ? null : trashImages[Math.floor(Math.random() * trashImages.length)] // Random trash image
+          },
         ]);
       }
     }, 1000);
@@ -48,8 +77,8 @@ const GameScreen = () => {
   const moveFish = (evt) => {
     if (!paused) {
       const touchX = evt.nativeEvent.pageX;
-      const newFishX = touchX - 25;
-      setFishPosition([newFishX, height - 60]);
+      const newFishX = touchX - 24; // Adjusted for 48x48 fish
+      setFishPosition([newFishX, height - 48]);
     }
   };
 
@@ -86,8 +115,8 @@ const GameScreen = () => {
   }, [paused, handleCollisions]);
 
   const checkCollision = (fishPos, itemPos) => {
-    const fishSize = { width: 50, height: 30 };
-    const itemSize = { width: 30, height: 30 };
+    const fishSize = { width: 48, height: 48 }; // Adjusted for 48x48 fish
+    const itemSize = { width: 48, height: 48 }; // Adjusted for 48x48 items
 
     return (
       fishPos[0] < itemPos[0] + itemSize.width &&
@@ -111,9 +140,9 @@ const GameScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={moveFish}>
       <View style={styles.container}>
-        <Fish position={fishPosition} />
+        <Image source={require('../../assets/images/fish.png')} style={[styles.fish, { left: fishPosition[0], top: fishPosition[1] }]} />
         {items.map((item) => (
-          <Item key={item.id} type={item.type} position={item.position} />
+          <Item key={item.id} type={item.type} position={item.position} image={item.type === 'trash' ? item.image : null} />
         ))}
         <View style={styles.scoreContainer}>
           <Text style={styles.scoreText}>Pontos: {score}</Text>
@@ -135,6 +164,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'cyan',
+  },
+  fish: {
+    position: 'absolute',
+    width: 48, // Adjusted for 48x48 fish
+    height: 48, // Adjusted for 48x48 fish
   },
   scoreContainer: {
     position: 'absolute',
