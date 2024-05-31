@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
     height: 48, // Adjusted for 32x32 items
   },
   image: {
-    width: 48, // Adjusted for 32x32 items
-    height: 48, // Adjusted for 32x32 items
+    width: 64, // Adjusted for 32x32 items
+    height: 64, // Adjusted for 32x32 items
   },
   defaultItem: {
     width: 48, // Adjusted for 32x32 items

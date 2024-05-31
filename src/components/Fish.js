@@ -10,8 +10,8 @@ const Fish = ({ position }) => {
 
 const styles = StyleSheet.create({
   fish: {
-    width: 50,
-    height: 30,
+    width: 32,
+    height: 32,
     backgroundColor: 'orange',
     position: 'absolute',
     borderColor: 'black',
