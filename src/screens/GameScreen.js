@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Dimensions, TouchableWithoutFeedback, Text, Alert, TouchableOpacity, ImageBackground, Image } from 'react-native';
-import Fish from '../components/Fish';
+import { StyleSheet, View, Dimensions, TouchableWithoutFeedback, Text, Alert, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import Item from '../components/Item';
 import Heart from '../components/Heart';
 import { Ionicons } from '@expo/vector-icons';
+import EndModal from '../components/EndModal';
 
 const { width, height } = Dimensions.get('window');
 
-// Import trash images
 const trashImages = [
   require('../../assets/images/trash/trash1.png'),
   require('../../assets/images/trash/trash2.png'),
@@ -16,7 +15,6 @@ const trashImages = [
   require('../../assets/images/trash/trash5.png'),
 ];
 
-// Import food images
 const foodImages = [
   require('../../assets/images/food/food1.png'),
   require('../../assets/images/food/food2.png'),
@@ -28,16 +26,17 @@ const foodImages = [
 // Import background image
 const backgroundImage = require('../../assets/images/background.png');
 
-const GameScreen = () => {
-  const [fishPosition, setFishPosition] = useState([width / 2 - 32, height - 64]); // Adjusted for 64x64 fish
+const GameScreen = ({ navigation }) => {
+  const [fishPosition, setFishPosition] = useState([width / 2 - 32, height - 64]);
   const [items, setItems] = useState([]);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [paused, setPaused] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!paused) {
+      if (!paused && !gameOver) {
         const isFood = Math.random() < 0.7;
         setItems((prevItems) => [
           ...prevItems,
@@ -54,11 +53,11 @@ const GameScreen = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [paused]);
+  }, [paused, gameOver]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!paused) {
+      if (!paused && !gameOver) {
         setItems((prevItems) =>
           prevItems.map((item) => {
             const newY = item.position[1] + 5;
@@ -72,12 +71,12 @@ const GameScreen = () => {
     }, 50);
 
     return () => clearInterval(interval);
-  }, [paused]);
+  }, [paused, gameOver]);
 
   const moveFish = (evt) => {
-    if (!paused) {
+    if (!paused && !gameOver) {
       const touchX = evt.nativeEvent.pageX;
-      const newFishX = touchX - 32; // Adjusted for 64x64 fish
+      const newFishX = touchX - 32;
       setFishPosition([newFishX, height - 64]);
     }
   };
@@ -92,7 +91,7 @@ const GameScreen = () => {
             setLives((prevLives) => {
               const newLives = prevLives - 1;
               if (newLives <= 0) {
-                Alert.alert("Game Over", "You ate too much trash!", [{ text: "OK", onPress: () => resetGame() }]);
+                setGameOver(true);
               }
               return newLives;
             });
@@ -106,17 +105,17 @@ const GameScreen = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!paused) {
+      if (!paused && !gameOver) {
         handleCollisions();
       }
     }, 50);
 
     return () => clearInterval(interval);
-  }, [paused, handleCollisions]);
+  }, [paused, gameOver, handleCollisions]);
 
   const checkCollision = (fishPos, itemPos) => {
-    const fishSize = { width: 64, height: 64 }; // Adjusted for 64x64 fish
-    const itemSize = { width: 48, height: 48 }; // Adjusted for 48x48 items
+    const fishSize = { width: 64, height: 64 };
+    const itemSize = { width: 48, height: 48 };
 
     return (
       fishPos[0] < itemPos[0] + itemSize.width &&
@@ -131,6 +130,8 @@ const GameScreen = () => {
     setLives(3);
     setItems([]);
     setPaused(false);
+    setGameOver(false);
+    navigation.navigate('Start');
   };
 
   const togglePause = () => {
@@ -141,7 +142,7 @@ const GameScreen = () => {
     <TouchableWithoutFeedback onPress={moveFish}>
       <View style={styles.container}>
         <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-          <Fish position={fishPosition} />
+          <Image source={require('../../assets/images/fish.png')} style={[styles.fish, { left: fishPosition[0], top: fishPosition[1] }]} />
           {items.map((item) => (
             <Item key={item.id} type={item.type} position={item.position} image={item.image} />
           ))}
@@ -156,6 +157,7 @@ const GameScreen = () => {
               <Heart key={i} />
             ))}
           </View>
+          <EndModal visible={gameOver} onRestart={resetGame} />
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
@@ -172,8 +174,8 @@ const styles = StyleSheet.create({
   },
   fish: {
     position: 'absolute',
-    width: 64, // Adjusted for 64x64 fish
-    height: 64, // Adjusted for 64x64 fish
+    width: 64,
+    height: 64,
   },
   scoreContainer: {
     position: 'absolute',
