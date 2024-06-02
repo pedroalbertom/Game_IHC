@@ -1,6 +1,6 @@
-# Jogo do Peixe
+# Game_IHC
 
-Bem-vindo ao Jogo do Peixe! Este é um jogo mobile desenvolvido em React Native onde você controla um peixe que deve evitar lixo e coletar alimentos.
+Bem-vindo ao Game_IHC! Este é um jogo mobile desenvolvido em React Native onde você controla um peixe que deve evitar lixo e coletar alimentos.
 
 ## Pré-requisitos
 
@@ -17,8 +17,8 @@ Antes de começar, você precisará ter as seguintes ferramentas instaladas no s
 1. **Clone este repositório:**
 
     ```sh
-    git clone https://github.com/seu-usuario/jogo-do-peixe.git
-    cd jogo-do-peixe
+    git clone https://github.com/seu-usuario/Game_IHC.git
+    cd Game_IHC
     ```
 
 2. **Instale as dependências do projeto:**
