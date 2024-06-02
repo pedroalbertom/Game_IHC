@@ -30,7 +30,7 @@ Antes de começar, você precisará ter as seguintes ferramentas instaladas no s
 3. **Inicie o servidor de desenvolvimento do Expo:**
 
     ```sh
-    npx expo start
+    npm start
     ```
 
 ## Executando no Emulador ou Dispositivo Físico
